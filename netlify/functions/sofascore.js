@@ -5,9 +5,9 @@ exports.handler = async function (event, context) {
       {
         method: "GET",
         headers: {
-          "x-rapidapi-key": process.env.RAPIDAPI_KEY,
-          "x-rapidapi-host": "sofascore.p.rapidapi.com"
-        }
+  "x-rapidapi-key": process.env.RAPIDAPI_KEY,
+  "x-rapidapi-host": "sofascore.p.rapidapi.com"
+}
       }
     );
 
