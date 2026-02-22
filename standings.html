@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>League Standings — Saudi Pro League 2025-26</title>
+    <meta name="description"
+        content="Full Saudi Pro League 2025-26 standings table with all 18 teams, points, goal difference, and form." />
+    <link rel="stylesheet" href="style.css" />
+    <link rel="icon"
+        href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>" />
+</head>
+
+<body>
+
+    <nav class="navbar">
+        <div class="nav-content">
+            <a href="index.html" class="nav-logo">
+                <div class="nav-logo-icon">SPL</div>
+                <div class="nav-logo-text">Saudi <span>Pro League</span></div>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="standings.html">Standings</a></li>
+                <li><a href="results.html">Results</a></li>
+                <li><a href="scorers.html">Top Scorers</a></li>
+                <li><a href="assists.html">Top Assists</a></li>
+            </ul>
+            <button class="nav-mobile-toggle" id="mobileToggle" aria-label="Toggle navigation">☰</button>
+            <div class="lang-switcher">
+                <button id="langToggle" class="lang-btn">
+                    <span class="lang-icon">🌐</span>
+                    <span class="lang-text">Arabic</span>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <main>
+        <div class="page-header fade-in">
+            <h1 class="page-title"><span data-i18n="leagueStandings">🏆 League Standings</span></h1>
+            <p class="page-subtitle"><span data-i18n="season">2025-26 Season</span> — <span
+                    data-i18n="matchday">Matchday</span> 23</p>
+        </div>
+
+        <section class="fade-in">
+            <div class="standings-card">
+                <table class="standings-table">
+                    <thead>
+                        <tr>
+                            <th style="width:50px">#</th>
+                            <th style="text-align:left" data-i18n="team">Team</th>
+                            <th data-i18n="p">P</th>
+                            <th class="hide-mobile" data-i18n="w">W</th>
+                            <th class="hide-mobile" data-i18n="d">D</th>
+                            <th class="hide-mobile" data-i18n="l">L</th>
+                            <th class="hide-mobile" data-i18n="gf">GF</th>
+                            <th class="hide-mobile" data-i18n="ga">GA</th>
+                            <th data-i18n="gd">GD</th>
+                            <th data-i18n="pts">PTS</th>
+                            <th class="hide-mobile" data-i18n="form">Form</th>
+                        </tr>
+                    </thead>
+                    <tbody id="standingsBody"></tbody>
+                </table>
+                <div class="table-legend">
+                    <div class="legend-item">
+                        <div class="legend-dot acl"></div>
+                        <span data-i18n="afcChampionsLeague">AFC Champions League</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-dot relegation"></div>
+                        <span data-i18n="relegationZone">Relegation Zone</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <p>© 2025 <span class="accent" data-i18n="title">Saudi Pro League</span> <span data-i18n="footerText">Stats
+                    Tracker — All data for illustration purposes.</span></p>
+            <p style="margin-top: 5px; opacity: 0.8; font-size: 0.9em;"><span data-i18n="madeBy">Made By</span> <span
+                    class="accent">Hatosy</span></p>
+        </div>
+    </footer>
+
+    <script src="i18n.js"></script>
+    <script src="logos.js"></script>
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const tbody = document.getElementById("standingsBody");
+            const totalTeams = STANDINGS.length;
+
+            tbody.innerHTML = STANDINGS.map((row, i) => {
+                const pos = i + 1;
+                let posClass = "";
+                if (pos === 1) posClass = "top-1";
+                else if (pos === 2) posClass = "top-2";
+                else if (pos === 3) posClass = "top-3";
+                else if (pos === 4) posClass = "top-4";
+
+                let rowClass = "";
+                if (pos <= 4) rowClass = "acl-zone";
+                else if (pos >= totalTeams - 2) rowClass = "relegation-zone";
+
+                const gdSign = row.gd > 0 ? "+" : "";
+                const gdClass = row.gd > 0 ? "positive" : row.gd < 0 ? "negative" : "";
+                const formHtml = row.form.map(f => `<span class="form-badge ${f}">${f}</span>`).join("");
+
+                return `
+          <tr class="${rowClass}">
+            <td><span class="position-num ${posClass}">${pos}</span></td>
+            <td>
+              <div class="team-cell">
+                ${teamBadgeHTML(row.team, 32)}
+                <span class="team-name">${translateTeam(row.team)}</span>
+              </div>
+            </td>
+            <td>${row.p}</td>
+            <td class="hide-mobile">${row.w}</td>
+            <td class="hide-mobile">${row.d}</td>
+            <td class="hide-mobile">${row.l}</td>
+            <td class="hide-mobile">${row.gf}</td>
+            <td class="hide-mobile">${row.ga}</td>
+            <td class="gd-cell ${gdClass}">${gdSign}${row.gd}</td>
+            <td class="pts-cell">${row.pts}</td>
+            <td class="hide-mobile"><div class="form-badges">${formHtml}</div></td>
+          </tr>`;
+            }).join("");
+
+            // Update sidebar/nav links
+            document.querySelectorAll(".nav-links a").forEach((link, i) => {
+                const navLinks = ["home", "standings", "results", "scorers", "assists"];
+                if (navLinks[i]) {
+                    link.setAttribute("data-i18n", navLinks[i]);
+                    link.textContent = i18n(navLinks[i]);
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>

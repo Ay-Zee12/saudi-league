@@ -1,0 +1,16 @@
+{
+  "name": "saudi-league-stats",
+  "version": "1.0.0",
+  "description": "Saudi Pro League 2025-26 Stats Tracker",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve ."
+  },
+  "keywords": [],
+  "author": "Hatosy",
+  "license": "ISC",
+  "devDependencies": {
+    "serve": "^14.2.4"
+  }
+}
